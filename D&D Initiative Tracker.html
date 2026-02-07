@@ -185,6 +185,36 @@
             font-size: 11.5px;
         }
 
+        button.damage-btn {
+            background: #c53030;
+            color: white;
+            border: 2px solid #c53030;
+            padding: 6px 10px;
+            font-weight: bold;
+        }
+
+        button.damage-btn:hover {
+            background: #9b2c2c;
+            border-color: #9b2c2c;
+            color: white;
+            box-shadow: 0 0 10px rgba(197, 48, 48, 0.4);
+        }
+
+        button.healing-btn {
+            background: #38a169;
+            color: white;
+            border: 2px solid #38a169;
+            padding: 6px 10px;
+            font-weight: bold;
+        }
+
+        button.healing-btn:hover {
+            background: #2f855a;
+            border-color: #2f855a;
+            color: white;
+            box-shadow: 0 0 10px rgba(56, 161, 105, 0.4);
+        }
+
         .button-group {
             display: flex;
             gap: 10px;
@@ -534,7 +564,8 @@
                         ${c.type === 'monster' ? `
                         <div style="display: flex; gap: 8px; align-items: center;">
                             <input type="number" placeholder="±" style="width: 70px;" class="damage-input" onkeydown="handleDamageKeydown(event, this)" />
-                            <button class="small" onclick="applyDamage(this)" style="padding: 6px 10px;">✓</button>
+                            <button class="small damage-btn" onclick="applyDamage(this, 'damage')">−</button>
+                            <button class="small healing-btn" onclick="applyDamage(this, 'heal')">+</button>
                         </div>
                         ` : ''}
                     </td>
@@ -568,7 +599,8 @@
                 <td>
                     <div style="display: flex; gap: 8px; align-items: center;">
                         <input type="number" placeholder="±" style="width: 70px;" class="damage-input" onkeydown="handleDamageKeydown(event, this)" />
-                        <button class="small" onclick="applyDamage(this)" style="padding: 6px 10px;">✓</button>
+                        <button class="small damage-btn" onclick="applyDamage(this, 'damage')">−</button>
+                        <button class="small healing-btn" onclick="applyDamage(this, 'heal')">+</button>
                     </div>
                 </td>
                 <td><button class="danger small" onclick="removeCombatRow(this)">Remove</button></td>
@@ -656,29 +688,38 @@
         function handleDamageKeydown(event, input) {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                const button = input.nextElementSibling;
-                applyDamage(button);
+                // Find the damage button (red minus button)
+                const damageButton = input.parentElement.querySelector('.damage-btn');
+                applyDamage(damageButton, 'damage');
             }
         }
 
-        function applyDamage(button) {
+        function applyDamage(button, type) {
             const row = button.closest('tr');
             const damageInput = row.querySelector('.damage-input');
             const hpInput = row.querySelector('.hp-input');
             
-            const damage = parseInt(damageInput.value);
+            const value = parseInt(damageInput.value);
             const currentHp = parseInt(hpInput.value) || 0;
             
-            if (!isNaN(damage)) {
-                const newHp = Math.max(0, currentHp - damage);
+            if (!isNaN(value)) {
+                let newHp;
+                if (type === 'heal') {
+                    // Healing: add the value
+                    newHp = currentHp + value;
+                } else {
+                    // Damage: subtract the value
+                    newHp = Math.max(0, currentHp - value);
+                }
+                
                 hpInput.value = newHp;
                 damageInput.value = '';
                 
                 // Visual feedback
-                if (damage > 0) {
-                    hpInput.style.color = '#8b1e1e';
-                } else if (damage < 0) {
-                    hpInput.style.color = '#2d5016';
+                if (type === 'heal') {
+                    hpInput.style.color = '#38a169';
+                } else {
+                    hpInput.style.color = '#c53030';
                 }
                 
                 setTimeout(() => {
