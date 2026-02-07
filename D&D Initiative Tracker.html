@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -313,76 +313,76 @@
             <div class="left-column">
                 <!-- Players Table -->
                 <div class="section">
-                    <h2>Spieler</h2>
+                    <h2>Players</h2>
                     <table id="playersTable">
                         <thead>
                             <tr>
                                 <th>Name</th>
                                 <th>Initiative</th>
-                                <th>Aktion</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><input type="text" placeholder="Spielername" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
                                 <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><button class="danger small" onclick="removePlayerRow(this)">Entfernen</button></td>
+                                <td><button class="danger small" onclick="removePlayerRow(this)">Remove</button></td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="button-group">
-                        <button onclick="addPlayerRow()">+ Spieler hinzufügen</button>
+                        <button onclick="addPlayerRow()">+ Add Player</button>
                     </div>
                 </div>
 
                 <!-- Monsters Table -->
                 <div class="section">
-                    <h2>Monster</h2>
+                    <h2>Monsters</h2>
                     <table id="monstersTable">
                         <thead>
                             <tr>
                                 <th>Prefix</th>
-                                <th>Anzahl</th>
+                                <th>Count</th>
                                 <th>INI Mod</th>
                                 <th>HP</th>
-                                <th>Aktion</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><input type="text" placeholder="z.B. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><input type="number" placeholder="Anzahl" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
                                 <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
                                 <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><button class="danger small" onclick="removeMonsterRow(this)">Entfernen</button></td>
+                                <td><button class="danger small" onclick="removeMonsterRow(this)">Remove</button></td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="button-group">
-                        <button onclick="addMonsterRow()">+ Monster hinzufügen</button>
+                        <button onclick="addMonsterRow()">+ Add Monster</button>
                     </div>
                 </div>
             </div>
 
             <!-- Right Column: Combat Tracker -->
             <div class="section" id="combatSection" style="display: none;">
-                <h2>Kampf-Tracker</h2>
+                <h2>Combat Tracker</h2>
                 <table id="combatTable">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Initiative</th>
                             <th>HP</th>
-                            <th>Schaden/Heilung</th>
-                            <th>Aktion</th>
+                            <th>Damage/Healing</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="combatTableBody">
                     </tbody>
                 </table>
                 <div class="button-group">
-                    <button onclick="addCombatRow()">+ Zeile hinzufügen</button>
-                    <button class="secondary" onclick="resetCombat()">Combat zurücksetzen</button>
+                    <button onclick="addCombatRow()">+ Add Row</button>
+                    <button class="secondary" onclick="resetCombat()">Reset Combat</button>
                 </div>
             </div>
         </div>
@@ -390,7 +390,7 @@
         <!-- Roll Initiative Button -->
         <div class="section" style="text-align: center;">
             <button onclick="rollInitiative()" style="padding: 16px 32px; font-size: 18px;">
-                🎲 Initiative würfeln!
+                🎲 Roll Initiative!
             </button>
         </div>
     </div>
@@ -417,9 +417,9 @@
             const tbody = document.querySelector('#playersTable tbody');
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><input type="text" placeholder="Spielername" onkeydown="handleKeyNavigation(event, this)" /></td>
+                <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
                 <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><button class="danger small" onclick="removePlayerRow(this)">Entfernen</button></td>
+                <td><button class="danger small" onclick="removePlayerRow(this)">Remove</button></td>
             `;
             tbody.appendChild(row);
         }
@@ -435,11 +435,11 @@
             const tbody = document.querySelector('#monstersTable tbody');
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><input type="text" placeholder="z.B. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><input type="number" placeholder="Anzahl" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
+                <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
+                <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
                 <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
                 <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><button class="danger small" onclick="removeMonsterRow(this)">Entfernen</button></td>
+                <td><button class="danger small" onclick="removeMonsterRow(this)">Remove</button></td>
             `;
             tbody.appendChild(row);
         }
@@ -501,7 +501,7 @@
             });
 
             if (combatants.length === 0) {
-                alert('Bitte füge mindestens einen Spieler oder ein Monster hinzu!');
+                alert('Please add at least one player or monster!');
                 return;
             }
 
@@ -538,7 +538,7 @@
                         </div>
                         ` : ''}
                     </td>
-                    <td><button class="danger small" onclick="removeCombatRow(this)">Entfernen</button></td>
+                    <td><button class="danger small" onclick="removeCombatRow(this)">Remove</button></td>
                 `;
                 tbody.appendChild(row);
             });
@@ -571,7 +571,7 @@
                         <button class="small" onclick="applyDamage(this)" style="padding: 6px 10px;">✓</button>
                     </div>
                 </td>
-                <td><button class="danger small" onclick="removeCombatRow(this)">Entfernen</button></td>
+                <td><button class="danger small" onclick="removeCombatRow(this)">Remove</button></td>
             `;
             tbody.appendChild(row);
         }
@@ -581,7 +581,7 @@
         }
 
         function resetCombat() {
-            if (confirm('Möchtest du den Combat wirklich zurücksetzen?')) {
+            if (confirm('Do you really want to reset the combat?')) {
                 document.getElementById('combatSection').style.display = 'none';
                 document.getElementById('combatTableBody').innerHTML = '';
             }
