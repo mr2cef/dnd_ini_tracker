@@ -344,27 +344,25 @@
             margin-top: 16px;
         }
 
-        /* Container for table with remove buttons */
-        .table-with-buttons {
-            position: relative;
+        /* Hide header for button column */
+        th.button-col {
+            border: none;
+            background: transparent;
+            padding: 0;
+            width: 40px;
         }
 
-        .table-with-buttons table {
-            width: calc(100% - 40px);
-            margin-right: 40px;
+        /* Remove borders from button column cells */
+        td.button-col {
+            border: none;
+            padding: 4px;
+            width: 40px;
+            vertical-align: middle;
         }
 
-        /* Remove button positioned on the right side of each row */
-        tbody tr {
-            position: relative;
-        }
-
-        .remove-btn-cell {
-            position: absolute;
-            right: -40px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 32px;
+        /* Style for remove buttons in table */
+        td.button-col button {
+            min-width: 32px;
             padding: 6px 8px;
             font-size: 14px;
             font-weight: bold;
@@ -382,23 +380,22 @@
                 <div class="section">
                     <h2>Players</h2>
                     <div class="table-wrapper">
-                        <div class="table-with-buttons">
-                            <table id="playersTable">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Initiative</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="playersTableBody">
-                                    <tr>
-                                        <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                        <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                        <button class="danger small remove-btn-cell" onclick="removePlayerRow(this)">x</button>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table id="playersTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Initiative</th>
+                                    <th class="button-col"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="playersTableBody">
+                                <tr>
+                                    <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td class="button-col"><button class="danger small" onclick="removePlayerRow(this)">x</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="button-group">
                         <button onclick="addPlayerRow()">+ Add Player</button>
@@ -409,27 +406,26 @@
                 <div class="section">
                     <h2>Monsters</h2>
                     <div class="table-wrapper">
-                        <div class="table-with-buttons">
-                            <table id="monstersTable">
-                                <thead>
-                                    <tr>
-                                        <th>Prefix</th>
-                                        <th>Count</th>
-                                        <th>INI Mod</th>
-                                        <th>HP</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="monstersTableBody">
-                                    <tr>
-                                        <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                        <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                        <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                        <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                        <button class="danger small remove-btn-cell" onclick="removeMonsterRow(this)">x</button>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table id="monstersTable">
+                            <thead>
+                                <tr>
+                                    <th>Prefix</th>
+                                    <th>Count</th>
+                                    <th>INI Mod</th>
+                                    <th>HP</th>
+                                    <th class="button-col"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="monstersTableBody">
+                                <tr>
+                                    <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td class="button-col"><button class="danger small" onclick="removeMonsterRow(this)">x</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="button-group">
                         <button onclick="addMonsterRow()">+ Add Monster</button>
@@ -441,20 +437,19 @@
             <div class="section" id="combatSection" style="display: none;">
                 <h2>Combat Tracker</h2>
                 <div class="table-wrapper">
-                    <div class="table-with-buttons">
-                        <table id="combatTable">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Initiative</th>
-                                    <th>HP</th>
-                                    <th>Damage/Healing</th>
-                                </tr>
-                            </thead>
-                            <tbody id="combatTableBody">
-                            </tbody>
-                        </table>
-                    </div>
+                    <table id="combatTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Initiative</th>
+                                <th>HP</th>
+                                <th>Damage/Healing</th>
+                                <th class="button-col"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="combatTableBody">
+                        </tbody>
+                    </table>
                 </div>
                 <div class="button-group">
                     <button onclick="addCombatRow()">+ Add Row</button>
@@ -495,7 +490,7 @@
             row.innerHTML = `
                 <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
                 <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <button class="danger small remove-btn-cell" onclick="removePlayerRow(this)">x</button>
+                <td class="button-col"><button class="danger small" onclick="removePlayerRow(this)">x</button></td>
             `;
             tbody.appendChild(row);
         }
@@ -515,7 +510,7 @@
                 <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
                 <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
                 <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <button class="danger small remove-btn-cell" onclick="removeMonsterRow(this)">x</button>
+                <td class="button-col"><button class="danger small" onclick="removeMonsterRow(this)">x</button></td>
             `;
             tbody.appendChild(row);
         }
@@ -615,7 +610,7 @@
                         </div>
                         ` : ''}
                     </td>
-                    <button class="danger small remove-btn-cell" onclick="removeCombatRow(this)">x</button>
+                    <td class="button-col"><button class="danger small" onclick="removeCombatRow(this)">x</button></td>
                 `;
                 tbody.appendChild(row);
             });
@@ -649,7 +644,7 @@
                         <button class="small healing-btn" onclick="applyDamage(this, 'heal')">+</button>
                     </div>
                 </td>
-                <button class="danger small remove-btn-cell" onclick="removeCombatRow(this)">x</button>
+                <td class="button-col"><button class="danger small" onclick="removeCombatRow(this)">x</button></td>
             `;
             tbody.appendChild(row);
         }
