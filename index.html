@@ -805,15 +805,21 @@
             // Tab: Move to next cell or next row
             if (event.key === 'Tab' && !event.shiftKey) {
                 event.preventDefault();
-                if (currentIndex < cells.length - 1) {
-                    // Move to next cell in same row
-                    const nextInput = cells[currentIndex + 1].querySelector('input');
+                
+                // Try to find next cell with input in current row
+                let foundNextInput = false;
+                for (let i = currentIndex + 1; i < cells.length; i++) {
+                    const nextInput = cells[i].querySelector('input');
                     if (nextInput) {
                         nextInput.focus();
                         nextInput.select();
+                        foundNextInput = true;
+                        break;
                     }
-                } else {
-                    // Last cell in row - move to first cell of next row or create new row
+                }
+                
+                // If no more input fields in current row, move to next row
+                if (!foundNextInput) {
                     const rows = Array.from(tbody.children);
                     const rowIndex = rows.indexOf(row);
                     
