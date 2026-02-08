@@ -270,19 +270,23 @@
             color: var(--color-text-muted);
         }
 
+        .row-container[draggable="true"] {
             cursor: grab;
             transition: background 0.2s ease;
             position: relative;
         }
 
+        .row-container[draggable="true"]:hover {
             background: rgba(212, 175, 55, 0.08);
         }
 
+        .row-container.dragging {
             opacity: 0.6;
             background: rgba(212, 175, 55, 0.15) !important;
             cursor: grabbing !important;
         }
 
+        .row-container.drag-over-top::before {
             content: '';
             position: absolute;
             top: 0;
@@ -294,6 +298,7 @@
             z-index: 10;
         }
 
+        .row-container.drag-over-bottom::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -332,6 +337,33 @@
                 padding: 16px;
             }
         }
+
+        /* Table wrapper for responsive scrolling */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+
+        /* Row container for table row + remove button */
+        .row-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0;
+        }
+
+        .row-container table {
+            flex: 1;
+            margin-top: 0;
+        }
+
+        .row-container .remove-btn {
+            flex-shrink: 0;
+            min-width: 32px;
+            padding: 6px 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -344,22 +376,29 @@
                 <!-- Players Table -->
                 <div class="section">
                     <h2>Players</h2>
-                    <table id="playersTable">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Initiative</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><button class="danger small" onclick="removePlayerRow(this)">Remove</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table id="playersTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Initiative</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="playersTableRows">
+                        <div class="row-container">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                        <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="danger small remove-btn" onclick="removePlayerRow(this)">x</button>
+                        </div>
+                    </div>
                     <div class="button-group">
                         <button onclick="addPlayerRow()">+ Add Player</button>
                     </div>
@@ -368,26 +407,33 @@
                 <!-- Monsters Table -->
                 <div class="section">
                     <h2>Monsters</h2>
-                    <table id="monstersTable">
-                        <thead>
-                            <tr>
-                                <th>Prefix</th>
-                                <th>Count</th>
-                                <th>INI Mod</th>
-                                <th>HP</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><button class="danger small" onclick="removeMonsterRow(this)">Remove</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table id="monstersTable">
+                            <thead>
+                                <tr>
+                                    <th>Prefix</th>
+                                    <th>Count</th>
+                                    <th>INI Mod</th>
+                                    <th>HP</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="monstersTableRows">
+                        <div class="row-container">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                        <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                        <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                        <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="danger small remove-btn" onclick="removeMonsterRow(this)">x</button>
+                        </div>
+                    </div>
                     <div class="button-group">
                         <button onclick="addMonsterRow()">+ Add Monster</button>
                     </div>
@@ -397,19 +443,22 @@
             <!-- Right Column: Combat Tracker -->
             <div class="section" id="combatSection" style="display: none;">
                 <h2>Combat Tracker</h2>
-                <table id="combatTable">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Initiative</th>
-                            <th>HP</th>
-                            <th>Damage/Healing</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="combatTableBody">
-                    </tbody>
-                </table>
+                <div class="table-wrapper">
+                    <table id="combatTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Initiative</th>
+                                <th>HP</th>
+                                <th>Damage/Healing</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div id="combatTableRows">
+                    <div id="combatTableBody">
+                    </div>
+                </div>
                 <div class="button-group">
                     <button onclick="addCombatRow()">+ Add Row</button>
                     <button class="secondary" onclick="resetCombat()">Reset Combat</button>
@@ -444,40 +493,54 @@
         });
 
         function addPlayerRow() {
-            const tbody = document.querySelector('#playersTable tbody');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><button class="danger small" onclick="removePlayerRow(this)">Remove</button></td>
+            const container = document.getElementById('playersTableRows');
+            const rowContainer = document.createElement('div');
+            rowContainer.className = 'row-container';
+            rowContainer.innerHTML = `
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
+                            <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="danger small remove-btn" onclick="removePlayerRow(this)">x</button>
             `;
-            tbody.appendChild(row);
+            container.appendChild(rowContainer);
         }
 
         function removePlayerRow(button) {
-            const tbody = button.closest('tbody');
-            if (tbody.children.length > 1) {
-                button.closest('tr').remove();
+            const container = document.getElementById('playersTableRows');
+            if (container.children.length > 1) {
+                button.closest('.row-container').remove();
             }
         }
 
         function addMonsterRow() {
-            const tbody = document.querySelector('#monstersTable tbody');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><button class="danger small" onclick="removeMonsterRow(this)">Remove</button></td>
+            const container = document.getElementById('monstersTableRows');
+            const rowContainer = document.createElement('div');
+            rowContainer.className = 'row-container';
+            rowContainer.innerHTML = `
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
+                            <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
+                            <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
+                            <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="danger small remove-btn" onclick="removeMonsterRow(this)">x</button>
             `;
-            tbody.appendChild(row);
+            container.appendChild(rowContainer);
         }
 
         function removeMonsterRow(button) {
-            const tbody = button.closest('tbody');
-            if (tbody.children.length > 1) {
-                button.closest('tr').remove();
+            const container = document.getElementById('monstersTableRows');
+            if (container.children.length > 1) {
+                button.closest('.row-container').remove();
             }
         }
 
@@ -489,8 +552,9 @@
             const combatants = [];
 
             // Get players
-            const playerRows = document.querySelectorAll('#playersTable tbody tr');
-            playerRows.forEach(row => {
+            const playerContainers = document.querySelectorAll('#playersTableRows .row-container');
+            playerContainers.forEach(container => {
+                const row = container.querySelector('tr');
                 const name = row.cells[0].querySelector('input').value.trim();
                 const initiative = parseInt(row.cells[1].querySelector('input').value);
                 
@@ -506,8 +570,9 @@
             });
 
             // Get monsters and roll for each
-            const monsterRows = document.querySelectorAll('#monstersTable tbody tr');
-            monsterRows.forEach(row => {
+            const monsterContainers = document.querySelectorAll('#monstersTableRows .row-container');
+            monsterContainers.forEach(container => {
+                const row = container.querySelector('tr');
                 const prefix = row.cells[0].querySelector('input').value.trim();
                 const count = parseInt(row.cells[1].querySelector('input').value);
                 const iniMod = parseInt(row.cells[2].querySelector('input').value) || 0;
@@ -542,36 +607,43 @@
             const tbody = document.getElementById('combatTableBody');
             tbody.innerHTML = '';
             combatants.forEach(c => {
-                const row = document.createElement('tr');
-                row.draggable = true;
-                row.addEventListener('dragstart', handleDragStart);
-                row.addEventListener('dragover', handleDragOver);
-                row.addEventListener('drop', handleDrop);
-                row.addEventListener('dragend', handleDragEnd);
+                const rowContainer = document.createElement('div');
+                rowContainer.className = 'row-container';
+                rowContainer.draggable = true;
+                rowContainer.addEventListener('dragstart', handleDragStart);
+                rowContainer.addEventListener('dragover', handleDragOver);
+                rowContainer.addEventListener('drop', handleDrop);
+                rowContainer.addEventListener('dragend', handleDragEnd);
                 
-                row.innerHTML = `
-                    <td>${c.name}</td>
-                    <td>${c.initiative}</td>
-                    <td>
-                        ${c.type === 'monster' ? `
-                        <div class="hp-display">
-                            <input type="number" value="${c.hp}" placeholder="HP" style="width: 100px;" data-maxhp="${c.maxHp}" class="hp-input" />
-                            <span style="color: var(--color-text-muted); font-size: 0.85rem;">/ ${c.maxHp}</span>
-                        </div>
-                        ` : ''}
-                    </td>
-                    <td>
-                        ${c.type === 'monster' ? `
-                        <div style="display: flex; gap: 8px; align-items: center;">
-                            <input type="number" placeholder="±" style="width: 70px;" class="damage-input" onkeydown="handleDamageKeydown(event, this)" />
-                            <button class="small damage-btn" onclick="applyDamage(this, 'damage')">−</button>
-                            <button class="small healing-btn" onclick="applyDamage(this, 'heal')">+</button>
-                        </div>
-                        ` : ''}
-                    </td>
-                    <td><button class="danger small" onclick="removeCombatRow(this)">Remove</button></td>
+                rowContainer.innerHTML = `
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>${c.name}</td>
+                                <td>${c.initiative}</td>
+                                <td>
+                                    ${c.type === 'monster' ? `
+                                    <div class="hp-display">
+                                        <input type="number" value="${c.hp}" placeholder="HP" style="width: 100px;" data-maxhp="${c.maxHp}" class="hp-input" />
+                                        <span style="color: var(--color-text-muted); font-size: 0.85rem;">/ ${c.maxHp}</span>
+                                    </div>
+                                    ` : ''}
+                                </td>
+                                <td>
+                                    ${c.type === 'monster' ? `
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="number" placeholder="±" style="width: 70px;" class="damage-input" onkeydown="handleDamageKeydown(event, this)" />
+                                        <button class="small damage-btn" onclick="applyDamage(this, 'damage')">−</button>
+                                        <button class="small healing-btn" onclick="applyDamage(this, 'heal')">+</button>
+                                    </div>
+                                    ` : ''}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="danger small remove-btn" onclick="removeCombatRow(this)">x</button>
                 `;
-                tbody.appendChild(row);
+                tbody.appendChild(rowContainer);
             });
 
             // Show combat section
@@ -581,35 +653,42 @@
 
         function addCombatRow() {
             const tbody = document.getElementById('combatTableBody');
-            const row = document.createElement('tr');
-            row.draggable = true;
-            row.addEventListener('dragstart', handleDragStart);
-            row.addEventListener('dragover', handleDragOver);
-            row.addEventListener('drop', handleDrop);
-            row.addEventListener('dragend', handleDragEnd);
+            const rowContainer = document.createElement('div');
+            rowContainer.className = 'row-container';
+            rowContainer.draggable = true;
+            rowContainer.addEventListener('dragstart', handleDragStart);
+            rowContainer.addEventListener('dragover', handleDragOver);
+            rowContainer.addEventListener('drop', handleDrop);
+            rowContainer.addEventListener('dragend', handleDragEnd);
             
-            row.innerHTML = `
-                <td><input type="text" placeholder="Name" style="width: 100%;" /></td>
-                <td><input type="number" placeholder="Initiative" style="width: 80px;" /></td>
-                <td>
-                    <div class="hp-display">
-                        <input type="number" placeholder="HP" style="width: 100px;" class="hp-input" />
-                    </div>
-                </td>
-                <td>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <input type="number" placeholder="±" style="width: 70px;" class="damage-input" onkeydown="handleDamageKeydown(event, this)" />
-                        <button class="small damage-btn" onclick="applyDamage(this, 'damage')">−</button>
-                        <button class="small healing-btn" onclick="applyDamage(this, 'heal')">+</button>
-                    </div>
-                </td>
-                <td><button class="danger small" onclick="removeCombatRow(this)">Remove</button></td>
+            rowContainer.innerHTML = `
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" placeholder="Name" style="width: 100%;" /></td>
+                            <td><input type="number" placeholder="Initiative" style="width: 80px;" /></td>
+                            <td>
+                                <div class="hp-display">
+                                    <input type="number" placeholder="HP" style="width: 100px;" class="hp-input" />
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <input type="number" placeholder="±" style="width: 70px;" class="damage-input" onkeydown="handleDamageKeydown(event, this)" />
+                                    <button class="small damage-btn" onclick="applyDamage(this, 'damage')">−</button>
+                                    <button class="small healing-btn" onclick="applyDamage(this, 'heal')">+</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="danger small remove-btn" onclick="removeCombatRow(this)">x</button>
             `;
-            tbody.appendChild(row);
+            tbody.appendChild(rowContainer);
         }
 
         function removeCombatRow(button) {
-            button.closest('tr').remove();
+            button.closest('.row-container').remove();
         }
 
         function resetCombat() {
@@ -636,20 +715,20 @@
             e.dataTransfer.dropEffect = 'move';
             
             // Remove all drag-over classes first
-            document.querySelectorAll('#combatTableBody tr').forEach(r => {
+            document.querySelectorAll('#combatTableBody .row-container').forEach(r => {
                 r.classList.remove('drag-over-top', 'drag-over-bottom');
             });
             
-            const row = e.target.closest('tr');
-            if (row && row !== draggedRow && row.parentNode === draggedRow.parentNode) {
-                const rect = row.getBoundingClientRect();
+            const rowContainer = e.target.closest('.row-container');
+            if (rowContainer && rowContainer !== draggedRow && rowContainer.parentNode === draggedRow.parentNode) {
+                const rect = rowContainer.getBoundingClientRect();
                 const midpoint = rect.top + rect.height / 2;
                 
                 // Determine if cursor is in top or bottom half
                 if (e.clientY < midpoint) {
-                    row.classList.add('drag-over-top');
+                    rowContainer.classList.add('drag-over-top');
                 } else {
-                    row.classList.add('drag-over-bottom');
+                    rowContainer.classList.add('drag-over-bottom');
                 }
             }
             return false;
@@ -660,17 +739,17 @@
                 e.stopPropagation();
             }
             
-            const row = e.target.closest('tr');
-            if (row && draggedRow && row !== draggedRow && row.parentNode === draggedRow.parentNode) {
-                const rect = row.getBoundingClientRect();
+            const rowContainer = e.target.closest('.row-container');
+            if (rowContainer && draggedRow && rowContainer !== draggedRow && rowContainer.parentNode === draggedRow.parentNode) {
+                const rect = rowContainer.getBoundingClientRect();
                 const midpoint = rect.top + rect.height / 2;
-                const tbody = row.parentNode;
+                const tbody = rowContainer.parentNode;
                 
                 // Insert based on cursor position
                 if (e.clientY < midpoint) {
-                    tbody.insertBefore(draggedRow, row);
+                    tbody.insertBefore(draggedRow, rowContainer);
                 } else {
-                    tbody.insertBefore(draggedRow, row.nextSibling);
+                    tbody.insertBefore(draggedRow, rowContainer.nextSibling);
                 }
             }
             
@@ -679,7 +758,7 @@
 
         function handleDragEnd(e) {
             this.classList.remove('dragging');
-            document.querySelectorAll('#combatTableBody tr').forEach(row => {
+            document.querySelectorAll('#combatTableBody .row-container').forEach(row => {
                 row.classList.remove('drag-over-top', 'drag-over-bottom');
             });
         }
@@ -731,19 +810,60 @@
         function handleKeyNavigation(event, input) {
             const cell = input.closest('td');
             const row = cell.closest('tr');
-            const tbody = row.closest('tbody');
-            const table = tbody.closest('table');
+            const rowContainer = row.closest('.row-container');
             const cells = Array.from(row.cells);
             const currentIndex = cells.indexOf(cell);
 
-            // Tab: Move to next cell
+            // Tab: Move to next cell or next row
             if (event.key === 'Tab' && !event.shiftKey) {
                 event.preventDefault();
-                if (currentIndex < cells.length - 2) { // -2 to skip action column
+                if (currentIndex < cells.length - 1) {
+                    // Move to next cell in same row
                     const nextInput = cells[currentIndex + 1].querySelector('input');
                     if (nextInput) {
                         nextInput.focus();
                         nextInput.select();
+                    }
+                } else {
+                    // Last cell in row - move to first cell of next row or create new row
+                    const container = rowContainer.parentElement;
+                    const rowContainers = Array.from(container.children);
+                    const rowIndex = rowContainers.indexOf(rowContainer);
+                    
+                    if (rowIndex === rowContainers.length - 1) {
+                        // Last row - determine table type and add new row
+                        const playersContainer = document.getElementById('playersTableRows');
+                        const monstersContainer = document.getElementById('monstersTableRows');
+                        
+                        if (container === playersContainer) {
+                            addPlayerRow();
+                            setTimeout(() => {
+                                const newRowContainer = container.lastElementChild;
+                                const firstInput = newRowContainer.querySelector('tr').cells[0].querySelector('input');
+                                if (firstInput) {
+                                    firstInput.focus();
+                                    firstInput.select();
+                                }
+                            }, 10);
+                        } else if (container === monstersContainer) {
+                            addMonsterRow();
+                            setTimeout(() => {
+                                const newRowContainer = container.lastElementChild;
+                                const firstInput = newRowContainer.querySelector('tr').cells[0].querySelector('input');
+                                if (firstInput) {
+                                    firstInput.focus();
+                                    firstInput.select();
+                                }
+                            }, 10);
+                        }
+                    } else {
+                        // Move to first cell of next row
+                        const nextRowContainer = rowContainers[rowIndex + 1];
+                        const firstInput = nextRowContainer.querySelector('tr').cells[0].querySelector('input');
+                        if (firstInput) {
+                            firstInput.focus();
+                            firstInput.select();
+                        }
                     }
                 }
             }
@@ -763,21 +883,25 @@
             // Enter: Move to next row, create if needed
             if (event.key === 'Enter') {
                 event.preventDefault();
-                const rows = Array.from(tbody.children);
-                const rowIndex = rows.indexOf(row);
+                const container = rowContainer.parentElement;
+                const rowContainers = Array.from(container.children);
+                const rowIndex = rowContainers.indexOf(rowContainer);
                 
                 // Check if this is the last row
-                if (rowIndex === rows.length - 1) {
-                    // Create new row based on table type
-                    if (table.id === 'playersTable') {
+                if (rowIndex === rowContainers.length - 1) {
+                    // Last row - determine table type and add new row
+                    const playersContainer = document.getElementById('playersTableRows');
+                    const monstersContainer = document.getElementById('monstersTableRows');
+                    
+                    if (container === playersContainer) {
                         addPlayerRow();
-                    } else if (table.id === 'monstersTable') {
+                    } else if (container === monstersContainer) {
                         addMonsterRow();
                     }
                     // Focus first input in new row after a brief delay
                     setTimeout(() => {
-                        const newRow = tbody.lastElementChild;
-                        const firstInput = newRow.cells[0].querySelector('input');
+                        const newRowContainer = container.lastElementChild;
+                        const firstInput = newRowContainer.querySelector('tr').cells[0].querySelector('input');
                         if (firstInput) {
                             firstInput.focus();
                             firstInput.select();
@@ -785,8 +909,8 @@
                     }, 10);
                 } else {
                     // Move to same column in next row
-                    const nextRow = rows[rowIndex + 1];
-                    const nextInput = nextRow.cells[currentIndex].querySelector('input');
+                    const nextRowContainer = rowContainers[rowIndex + 1];
+                    const nextInput = nextRowContainer.querySelector('tr').cells[currentIndex].querySelector('input');
                     if (nextInput) {
                         nextInput.focus();
                         nextInput.select();
