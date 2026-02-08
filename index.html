@@ -808,16 +808,21 @@
         }
 
         // Constants
-        const FOCUS_DELAY_MS = 10;
+        const FOCUS_DELAY_MS = 10; // Brief delay to ensure DOM updates before focusing
 
         // Helper function to focus on first input of a row container
         function focusFirstInputInContainer(container) {
             setTimeout(() => {
                 const newRowContainer = container.lastElementChild;
-                const firstInput = newRowContainer.querySelector('tr').cells[0].querySelector('input');
-                if (firstInput) {
-                    firstInput.focus();
-                    firstInput.select();
+                if (newRowContainer) {
+                    const row = newRowContainer.querySelector('tr');
+                    if (row && row.cells.length > 0) {
+                        const firstInput = row.cells[0].querySelector('input');
+                        if (firstInput) {
+                            firstInput.focus();
+                            firstInput.select();
+                        }
+                    }
                 }
             }, FOCUS_DELAY_MS);
         }
@@ -864,10 +869,15 @@
                     } else {
                         // Move to first cell of next row
                         const nextRowContainer = rowContainers[rowIndex + 1];
-                        const firstInput = nextRowContainer.querySelector('tr').cells[0].querySelector('input');
-                        if (firstInput) {
-                            firstInput.focus();
-                            firstInput.select();
+                        if (nextRowContainer) {
+                            const row = nextRowContainer.querySelector('tr');
+                            if (row && row.cells.length > 0) {
+                                const firstInput = row.cells[0].querySelector('input');
+                                if (firstInput) {
+                                    firstInput.focus();
+                                    firstInput.select();
+                                }
+                            }
                         }
                     }
                 }
@@ -900,10 +910,15 @@
                 } else {
                     // Move to same column in next row
                     const nextRowContainer = rowContainers[rowIndex + 1];
-                    const nextInput = nextRowContainer.querySelector('tr').cells[currentIndex].querySelector('input');
-                    if (nextInput) {
-                        nextInput.focus();
-                        nextInput.select();
+                    if (nextRowContainer) {
+                        const row = nextRowContainer.querySelector('tr');
+                        if (row && row.cells.length > currentIndex) {
+                            const nextInput = row.cells[currentIndex].querySelector('input');
+                            if (nextInput) {
+                                nextInput.focus();
+                                nextInput.select();
+                            }
+                        }
                     }
                 }
             }
