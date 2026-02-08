@@ -322,6 +322,15 @@
             appearance: textfield;
         }
 
+        /* Default: show full header text, hide short text */
+        .header-short {
+            display: none;
+        }
+
+        .header-full {
+            display: inline;
+        }
+
         @media (max-width: 1200px) {
             .main-grid {
                 grid-template-columns: 1fr;
@@ -418,6 +427,15 @@
             h2 {
                 font-size: 1.1rem;
             }
+
+            /* Show short header text on mobile, hide full text */
+            .header-full {
+                display: none;
+            }
+
+            .header-short {
+                display: inline;
+            }
         }
 
         /* Table wrapper for responsive scrolling */
@@ -466,7 +484,7 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Initiative</th>
+                                    <th><span class="header-full">Initiative</span><span class="header-short">Ini</span></th>
                                     <th class="button-col"></th>
                                 </tr>
                             </thead>
@@ -523,9 +541,9 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Initiative</th>
+                                <th><span class="header-full">Initiative</span><span class="header-short">Ini</span></th>
                                 <th>HP</th>
-                                <th>Damage/Healing</th>
+                                <th><span class="header-full">Damage/Healing</span><span class="header-short">D/H</span></th>
                                 <th class="button-col"></th>
                             </tr>
                         </thead>
