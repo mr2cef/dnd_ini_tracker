@@ -336,6 +336,88 @@
             body {
                 padding: 16px;
             }
+
+            /* Remove horizontal scrolling on mobile */
+            .table-wrapper {
+                overflow-x: visible;
+            }
+
+            /* Make table cells more compact on mobile */
+            th, td {
+                padding: 6px;
+                font-size: 0.85rem;
+            }
+
+            /* Override all fixed-width inputs to be flexible on mobile */
+            #combatTable input[type="number"],
+            #combatTable input[type="text"] {
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100%;
+            }
+
+            /* Make HP display stack on mobile */
+            #combatTable .hp-display {
+                flex-direction: column;
+                gap: 2px;
+                align-items: flex-start;
+            }
+
+            /* Stack damage/healing controls vertically on mobile */
+            #combatTable td > div[style*="display: flex"] {
+                flex-direction: column !important;
+                gap: 4px !important;
+                align-items: stretch !important;
+            }
+
+            /* Make damage/heal buttons full width on mobile */
+            #combatTable .damage-btn,
+            #combatTable .healing-btn {
+                width: 100%;
+                padding: 8px;
+            }
+
+            /* Reduce table column widths on mobile */
+            #combatTable th:nth-child(1),
+            #combatTable td:nth-child(1) {
+                width: 25%;
+            }
+
+            #combatTable th:nth-child(2),
+            #combatTable td:nth-child(2) {
+                width: 15%;
+            }
+
+            #combatTable th:nth-child(3),
+            #combatTable td:nth-child(3) {
+                width: 20%;
+            }
+
+            #combatTable th:nth-child(4),
+            #combatTable td:nth-child(4) {
+                width: 30%;
+            }
+
+            /* Keep button column small */
+            th.button-col,
+            td.button-col {
+                width: 10%;
+            }
+
+            /* Make button text smaller on mobile */
+            button.small {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+
+            /* Reduce heading sizes on mobile */
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.1rem;
+            }
         }
 
         /* Table wrapper for responsive scrolling */
