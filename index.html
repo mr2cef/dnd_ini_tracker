@@ -807,6 +807,33 @@
             }
         }
 
+        // Constants
+        const FOCUS_DELAY_MS = 10;
+
+        // Helper function to focus on first input of a row container
+        function focusFirstInputInContainer(container) {
+            setTimeout(() => {
+                const newRowContainer = container.lastElementChild;
+                const firstInput = newRowContainer.querySelector('tr').cells[0].querySelector('input');
+                if (firstInput) {
+                    firstInput.focus();
+                    firstInput.select();
+                }
+            }, FOCUS_DELAY_MS);
+        }
+
+        // Helper function to add row based on container type
+        function addRowForContainer(container) {
+            const playersContainer = document.getElementById('playersTableRows');
+            const monstersContainer = document.getElementById('monstersTableRows');
+            
+            if (container === playersContainer) {
+                addPlayerRow();
+            } else if (container === monstersContainer) {
+                addMonsterRow();
+            }
+        }
+
         function handleKeyNavigation(event, input) {
             const cell = input.closest('td');
             const row = cell.closest('tr');
@@ -831,31 +858,9 @@
                     const rowIndex = rowContainers.indexOf(rowContainer);
                     
                     if (rowIndex === rowContainers.length - 1) {
-                        // Last row - determine table type and add new row
-                        const playersContainer = document.getElementById('playersTableRows');
-                        const monstersContainer = document.getElementById('monstersTableRows');
-                        
-                        if (container === playersContainer) {
-                            addPlayerRow();
-                            setTimeout(() => {
-                                const newRowContainer = container.lastElementChild;
-                                const firstInput = newRowContainer.querySelector('tr').cells[0].querySelector('input');
-                                if (firstInput) {
-                                    firstInput.focus();
-                                    firstInput.select();
-                                }
-                            }, 10);
-                        } else if (container === monstersContainer) {
-                            addMonsterRow();
-                            setTimeout(() => {
-                                const newRowContainer = container.lastElementChild;
-                                const firstInput = newRowContainer.querySelector('tr').cells[0].querySelector('input');
-                                if (firstInput) {
-                                    firstInput.focus();
-                                    firstInput.select();
-                                }
-                            }, 10);
-                        }
+                        // Last row - add new row and focus first input
+                        addRowForContainer(container);
+                        focusFirstInputInContainer(container);
                     } else {
                         // Move to first cell of next row
                         const nextRowContainer = rowContainers[rowIndex + 1];
@@ -889,24 +894,9 @@
                 
                 // Check if this is the last row
                 if (rowIndex === rowContainers.length - 1) {
-                    // Last row - determine table type and add new row
-                    const playersContainer = document.getElementById('playersTableRows');
-                    const monstersContainer = document.getElementById('monstersTableRows');
-                    
-                    if (container === playersContainer) {
-                        addPlayerRow();
-                    } else if (container === monstersContainer) {
-                        addMonsterRow();
-                    }
-                    // Focus first input in new row after a brief delay
-                    setTimeout(() => {
-                        const newRowContainer = container.lastElementChild;
-                        const firstInput = newRowContainer.querySelector('tr').cells[0].querySelector('input');
-                        if (firstInput) {
-                            firstInput.focus();
-                            firstInput.select();
-                        }
-                    }, 10);
+                    // Last row - add new row and focus first input
+                    addRowForContainer(container);
+                    focusFirstInputInContainer(container);
                 } else {
                     // Move to same column in next row
                     const nextRowContainer = rowContainers[rowIndex + 1];
