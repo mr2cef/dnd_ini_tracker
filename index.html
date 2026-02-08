@@ -270,19 +270,23 @@
             color: var(--color-text-muted);
         }
 
+        tr[draggable="true"] {
             cursor: grab;
             transition: background 0.2s ease;
             position: relative;
         }
 
+        tr[draggable="true"]:hover {
             background: rgba(212, 175, 55, 0.08);
         }
 
+        tr.dragging {
             opacity: 0.6;
             background: rgba(212, 175, 55, 0.15) !important;
             cursor: grabbing !important;
         }
 
+        tr.drag-over-top::before {
             content: '';
             position: absolute;
             top: 0;
@@ -294,6 +298,7 @@
             z-index: 10;
         }
 
+        tr.drag-over-bottom::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -332,6 +337,36 @@
                 padding: 16px;
             }
         }
+
+        /* Table wrapper for responsive scrolling */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+
+        /* Hide header for button column */
+        th.button-col {
+            border: none;
+            background: transparent;
+            padding: 0;
+            width: 40px;
+        }
+
+        /* Remove borders from button column cells */
+        td.button-col {
+            border: none;
+            padding: 4px;
+            width: 40px;
+            vertical-align: middle;
+        }
+
+        /* Style for remove buttons in table */
+        td.button-col button {
+            min-width: 32px;
+            padding: 6px 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -344,22 +379,24 @@
                 <!-- Players Table -->
                 <div class="section">
                     <h2>Players</h2>
-                    <table id="playersTable">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Initiative</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><button class="danger small" onclick="removePlayerRow(this)">Remove</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table id="playersTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Initiative</th>
+                                    <th class="button-col"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="playersTableBody">
+                                <tr>
+                                    <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td class="button-col"><button class="danger small" onclick="removePlayerRow(this)">x</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="button-group">
                         <button onclick="addPlayerRow()">+ Add Player</button>
                     </div>
@@ -368,26 +405,28 @@
                 <!-- Monsters Table -->
                 <div class="section">
                     <h2>Monsters</h2>
-                    <table id="monstersTable">
-                        <thead>
-                            <tr>
-                                <th>Prefix</th>
-                                <th>Count</th>
-                                <th>INI Mod</th>
-                                <th>HP</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
-                                <td><button class="danger small" onclick="removeMonsterRow(this)">Remove</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table id="monstersTable">
+                            <thead>
+                                <tr>
+                                    <th>Prefix</th>
+                                    <th>Count</th>
+                                    <th>INI Mod</th>
+                                    <th>HP</th>
+                                    <th class="button-col"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="monstersTableBody">
+                                <tr>
+                                    <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
+                                    <td class="button-col"><button class="danger small" onclick="removeMonsterRow(this)">x</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="button-group">
                         <button onclick="addMonsterRow()">+ Add Monster</button>
                     </div>
@@ -397,19 +436,21 @@
             <!-- Right Column: Combat Tracker -->
             <div class="section" id="combatSection" style="display: none;">
                 <h2>Combat Tracker</h2>
-                <table id="combatTable">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Initiative</th>
-                            <th>HP</th>
-                            <th>Damage/Healing</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="combatTableBody">
-                    </tbody>
-                </table>
+                <div class="table-wrapper">
+                    <table id="combatTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Initiative</th>
+                                <th>HP</th>
+                                <th>Damage/Healing</th>
+                                <th class="button-col"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="combatTableBody">
+                        </tbody>
+                    </table>
+                </div>
                 <div class="button-group">
                     <button onclick="addCombatRow()">+ Add Row</button>
                     <button class="secondary" onclick="resetCombat()">Reset Combat</button>
@@ -444,38 +485,38 @@
         });
 
         function addPlayerRow() {
-            const tbody = document.querySelector('#playersTable tbody');
+            const tbody = document.getElementById('playersTableBody');
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td><input type="text" placeholder="Player Name" onkeydown="handleKeyNavigation(event, this)" /></td>
                 <td><input type="number" placeholder="Initiative" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><button class="danger small" onclick="removePlayerRow(this)">Remove</button></td>
+                <td class="button-col"><button class="danger small" onclick="removePlayerRow(this)">x</button></td>
             `;
             tbody.appendChild(row);
         }
 
         function removePlayerRow(button) {
-            const tbody = button.closest('tbody');
+            const tbody = document.getElementById('playersTableBody');
             if (tbody.children.length > 1) {
                 button.closest('tr').remove();
             }
         }
 
         function addMonsterRow() {
-            const tbody = document.querySelector('#monstersTable tbody');
+            const tbody = document.getElementById('monstersTableBody');
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td><input type="text" placeholder="e.g. Goblin" onkeydown="handleKeyNavigation(event, this)" /></td>
                 <td><input type="number" placeholder="Count" value="1" min="1" onkeydown="handleKeyNavigation(event, this)" /></td>
                 <td><input type="number" placeholder="+0" value="0" onkeydown="handleKeyNavigation(event, this)" /></td>
                 <td><input type="number" placeholder="HP" value="7" onkeydown="handleKeyNavigation(event, this)" /></td>
-                <td><button class="danger small" onclick="removeMonsterRow(this)">Remove</button></td>
+                <td class="button-col"><button class="danger small" onclick="removeMonsterRow(this)">x</button></td>
             `;
             tbody.appendChild(row);
         }
 
         function removeMonsterRow(button) {
-            const tbody = button.closest('tbody');
+            const tbody = document.getElementById('monstersTableBody');
             if (tbody.children.length > 1) {
                 button.closest('tr').remove();
             }
@@ -489,7 +530,7 @@
             const combatants = [];
 
             // Get players
-            const playerRows = document.querySelectorAll('#playersTable tbody tr');
+            const playerRows = document.querySelectorAll('#playersTableBody tr');
             playerRows.forEach(row => {
                 const name = row.cells[0].querySelector('input').value.trim();
                 const initiative = parseInt(row.cells[1].querySelector('input').value);
@@ -506,7 +547,7 @@
             });
 
             // Get monsters and roll for each
-            const monsterRows = document.querySelectorAll('#monstersTable tbody tr');
+            const monsterRows = document.querySelectorAll('#monstersTableBody tr');
             monsterRows.forEach(row => {
                 const prefix = row.cells[0].querySelector('input').value.trim();
                 const count = parseInt(row.cells[1].querySelector('input').value);
@@ -569,7 +610,7 @@
                         </div>
                         ` : ''}
                     </td>
-                    <td><button class="danger small" onclick="removeCombatRow(this)">Remove</button></td>
+                    <td class="button-col"><button class="danger small" onclick="removeCombatRow(this)">x</button></td>
                 `;
                 tbody.appendChild(row);
             });
@@ -603,7 +644,7 @@
                         <button class="small healing-btn" onclick="applyDamage(this, 'heal')">+</button>
                     </div>
                 </td>
-                <td><button class="danger small" onclick="removeCombatRow(this)">Remove</button></td>
+                <td class="button-col"><button class="danger small" onclick="removeCombatRow(this)">x</button></td>
             `;
             tbody.appendChild(row);
         }
@@ -728,22 +769,74 @@
             }
         }
 
+        // Constants
+        const FOCUS_DELAY_MS = 10; // Brief delay to ensure DOM updates before focusing
+
+        // Helper function to focus on first input of a tbody
+        function focusFirstInputInTbody(tbody) {
+            setTimeout(() => {
+                const lastRow = tbody.lastElementChild;
+                if (lastRow && lastRow.cells.length > 0) {
+                    const firstInput = lastRow.cells[0].querySelector('input');
+                    if (firstInput) {
+                        firstInput.focus();
+                        firstInput.select();
+                    }
+                }
+            }, FOCUS_DELAY_MS);
+        }
+
+        // Helper function to add row based on tbody id
+        function addRowForTbody(tbody) {
+            if (tbody.id === 'playersTableBody') {
+                addPlayerRow();
+            } else if (tbody.id === 'monstersTableBody') {
+                addMonsterRow();
+            }
+        }
+
         function handleKeyNavigation(event, input) {
             const cell = input.closest('td');
             const row = cell.closest('tr');
             const tbody = row.closest('tbody');
-            const table = tbody.closest('table');
             const cells = Array.from(row.cells);
             const currentIndex = cells.indexOf(cell);
 
-            // Tab: Move to next cell
+            // Tab: Move to next cell or next row
             if (event.key === 'Tab' && !event.shiftKey) {
                 event.preventDefault();
-                if (currentIndex < cells.length - 2) { // -2 to skip action column
-                    const nextInput = cells[currentIndex + 1].querySelector('input');
+                
+                // Try to find next cell with input in current row
+                let foundNextInput = false;
+                for (let i = currentIndex + 1; i < cells.length; i++) {
+                    const nextInput = cells[i].querySelector('input');
                     if (nextInput) {
                         nextInput.focus();
                         nextInput.select();
+                        foundNextInput = true;
+                        break;
+                    }
+                }
+                
+                // If no more input fields in current row, move to next row
+                if (!foundNextInput) {
+                    const rows = Array.from(tbody.children);
+                    const rowIndex = rows.indexOf(row);
+                    
+                    if (rowIndex === rows.length - 1) {
+                        // Last row - add new row and focus first input
+                        addRowForTbody(tbody);
+                        focusFirstInputInTbody(tbody);
+                    } else {
+                        // Move to first cell of next row
+                        const nextRow = rows[rowIndex + 1];
+                        if (nextRow && nextRow.cells.length > 0) {
+                            const firstInput = nextRow.cells[0].querySelector('input');
+                            if (firstInput) {
+                                firstInput.focus();
+                                firstInput.select();
+                            }
+                        }
                     }
                 }
             }
@@ -768,28 +861,18 @@
                 
                 // Check if this is the last row
                 if (rowIndex === rows.length - 1) {
-                    // Create new row based on table type
-                    if (table.id === 'playersTable') {
-                        addPlayerRow();
-                    } else if (table.id === 'monstersTable') {
-                        addMonsterRow();
-                    }
-                    // Focus first input in new row after a brief delay
-                    setTimeout(() => {
-                        const newRow = tbody.lastElementChild;
-                        const firstInput = newRow.cells[0].querySelector('input');
-                        if (firstInput) {
-                            firstInput.focus();
-                            firstInput.select();
-                        }
-                    }, 10);
+                    // Last row - add new row and focus first input
+                    addRowForTbody(tbody);
+                    focusFirstInputInTbody(tbody);
                 } else {
                     // Move to same column in next row
                     const nextRow = rows[rowIndex + 1];
-                    const nextInput = nextRow.cells[currentIndex].querySelector('input');
-                    if (nextInput) {
-                        nextInput.focus();
-                        nextInput.select();
+                    if (nextRow && nextRow.cells.length > currentIndex) {
+                        const nextInput = nextRow.cells[currentIndex].querySelector('input');
+                        if (nextInput) {
+                            nextInput.focus();
+                            nextInput.select();
+                        }
                     }
                 }
             }
