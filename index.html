@@ -264,6 +264,10 @@
             gap: 4px;
         }
 
+        .condition-input {
+            width: 100%;
+        }
+
         .empty-state {
             text-align: center;
             padding: 32px;
@@ -379,38 +383,50 @@
                 align-items: stretch !important;
             }
 
-            /* Make damage/heal buttons full width on mobile */
+            /* Hide damage/heal buttons by default on mobile */
             #combatTable .damage-btn,
             #combatTable .healing-btn {
+                display: none;
                 width: 100%;
                 padding: 8px;
+            }
+
+            /* Show buttons when parent container has focus-within class */
+            #combatTable .damage-controls-focused .damage-btn,
+            #combatTable .damage-controls-focused .healing-btn {
+                display: block;
             }
 
             /* Reduce table column widths on mobile */
             #combatTable th:nth-child(1),
             #combatTable td:nth-child(1) {
-                width: 25%;
+                width: 20%;
             }
 
             #combatTable th:nth-child(2),
             #combatTable td:nth-child(2) {
-                width: 15%;
+                width: 12%;
             }
 
             #combatTable th:nth-child(3),
             #combatTable td:nth-child(3) {
-                width: 20%;
+                width: 18%;
             }
 
             #combatTable th:nth-child(4),
             #combatTable td:nth-child(4) {
-                width: 30%;
+                width: 25%;
+            }
+
+            #combatTable th:nth-child(5),
+            #combatTable td:nth-child(5) {
+                width: 17%;
             }
 
             /* Keep button column small */
             th.button-col,
             td.button-col {
-                width: 10%;
+                width: 8%;
             }
 
             /* Make button text smaller on mobile */
@@ -580,6 +596,7 @@
                                 <th><span class="header-full">Initiative</span><span class="header-short">Ini</span></th>
                                 <th>HP</th>
                                 <th><span class="header-full">Damage/Healing</span><span class="header-short">D/H</span></th>
+                                <th>Condition</th>
                                 <th class="button-col"></th>
                             </tr>
                         </thead>
@@ -629,6 +646,31 @@
                 }
             }
         });
+
+        // Mobile-responsive damage/heal buttons visibility
+        // Check if we're on mobile (max-width: 768px)
+        function isMobileView() {
+            return window.matchMedia('(max-width: 768px)').matches;
+        }
+
+        // Handle focus on damage input to show buttons (mobile only)
+        document.addEventListener('focus', function(e) {
+            if (e.target.classList.contains('damage-input') && isMobileView()) {
+                const container = e.target.parentElement;
+                container.classList.add('damage-controls-focused');
+            }
+        }, true);
+
+        // Handle blur on damage input to hide buttons (mobile only)
+        document.addEventListener('blur', function(e) {
+            if (e.target.classList.contains('damage-input') && isMobileView()) {
+                const container = e.target.parentElement;
+                // Small delay to allow button clicks to register
+                setTimeout(() => {
+                    container.classList.remove('damage-controls-focused');
+                }, 150);
+            }
+        }, true);
 
         function addPlayerRow() {
             const tbody = document.getElementById('playersTableBody');
@@ -742,8 +784,7 @@
                     <td>
                         ${c.type === 'monster' ? `
                         <div class="hp-display">
-                            <input type="number" value="${c.hp}" placeholder="HP" style="width: 100px;" data-maxhp="${c.maxHp}" class="hp-input" />
-                            <span style="color: var(--color-text-muted); font-size: 0.85rem;">/ ${c.maxHp}</span>
+                            <input type="number" value="${c.hp}" placeholder="HP" style="width: 100px;" class="hp-input" />
                         </div>
                         ` : ''}
                     </td>
@@ -755,6 +796,9 @@
                             <button class="small healing-btn" onclick="applyDamage(this, 'heal')">+</button>
                         </div>
                         ` : ''}
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Condition" class="condition-input" />
                     </td>
                     <td class="button-col"><button class="danger small" onclick="removeCombatRow(this)">x</button></td>
                 `;
@@ -789,6 +833,9 @@
                         <button class="small damage-btn" onclick="applyDamage(this, 'damage')">−</button>
                         <button class="small healing-btn" onclick="applyDamage(this, 'heal')">+</button>
                     </div>
+                </td>
+                <td>
+                    <input type="text" placeholder="Condition" class="condition-input" />
                 </td>
                 <td class="button-col"><button class="danger small" onclick="removeCombatRow(this)">x</button></td>
             `;
